@@ -1,0 +1,39 @@
+{
+  "name": "sistema-estacionamento-node-express-typescript",
+  "version": "1.0.0",
+  "description": "POC Sistema de Estacionamento com Node/Express/Typescript",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smfnto/sistema-estacionamento-node-express-typescript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smfnto/sistema-estacionamento-node-express-typescript/issues"
+  },
+  "homepage": "https://github.com/smfnto/sistema-estacionamento-node-express-typescript#readme",
+  "dependencies": {
+    "@types/express": "^4.17.2",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node --inspect -r ts-node/register src/index.ts",
+    "ext": "ts"
+  }
+}
