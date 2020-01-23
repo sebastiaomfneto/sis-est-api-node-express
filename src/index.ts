@@ -1,7 +1,6 @@
 import { Application } from './lib';
 
-import './entities';
-import './repositories';
+import './models';
 import './controllers';
 
 @Application()

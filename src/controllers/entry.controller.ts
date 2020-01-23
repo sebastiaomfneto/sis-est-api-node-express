@@ -1,28 +1,50 @@
-import { Route } from '../lib';
+import { Route, Request } from '../lib';
+import { NotFoundError, BadRequestError } from '../lib/errors';
+
+import { Entry } from '../models';
 
 export default class EntryController {
-  @Route.Get('/entries')
-  async index(@Route.Query('id') id?: number): Promise<any[]> {
-    return [{ id }];
+  entry: Entry;
+
+  @Route.Param('entryId')
+  async userId(entryId: string): Promise<void> {
+    const entry: Entry | null = await Entry.findByPk(entryId);
+
+    if (!entry) {
+      throw new NotFoundError();
+    }
+
+    this.entry = entry;
   }
 
-  @Route.Get('/entries/:id')
-  async find(@Route.Param('id') id: number): Promise<any> {
-    return { id };
+  @Route.Get('/entries')
+  async index(): Promise<Entry[]> {
+    return await Entry.findAll();
+  }
+
+  @Route.Get('/entries/:entryId')
+  async find(): Promise<Entry> {
+    return this.entry;
   }
 
   @Route.Post('/entries')
-  async create(@Route.Body() body: any): Promise<any> {
-    return { ...body };
+  async create(@Request.Body() body: Partial<Entry>): Promise<Entry> {
+    try {
+      return await Entry.create(body);
+    } catch (e) {
+      throw new BadRequestError(e.message);
+    }
   }
 
-  @Route.Put('/entries/:id')
-  async update(@Route.Param('id') id: number, @Route.Body() body: any): Promise<any> {
-    return { id, ...body };
+  @Route.Put('/entries/:entryId')
+  async update(@Request.Body() body: Partial<Entry>): Promise<Entry> {
+    await this.entry.update(body);
+
+    return this.entry;
   }
 
-  @Route.Delete('/entries/:id')
-  async remove(@Route.Param('id') id: number): Promise<any> {
-    return { id };
+  @Route.Delete('/entries/:entryId')
+  async remove(): Promise<void> {
+    await this.entry.destroy();
   }
 }

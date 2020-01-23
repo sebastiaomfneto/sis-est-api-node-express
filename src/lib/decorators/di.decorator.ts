@@ -4,19 +4,18 @@ export function DI() { }
 
 DI.Provide = function (): ClassDecorator {
   return function (target: Function): void {
-    sources.set(target, () => Object.create(target.prototype));
+    sources.set(target, () => new target.prototype.constructor());
   }
 }
 
 DI.Inject = function (source: any): PropertyDecorator {
-  return function (target: Object, key: string | symbol): void {
+  return function (target: Object, key: PropertyKey): void {
     Object.defineProperty(target, key, {
       configurable: true,
       enumerable: true,
       get: sources.has(source)
         ? sources.get(source) as () => any
-        : () => null,
-      writable: false
+        : () => null
     });
   }
 }
