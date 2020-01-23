@@ -3,7 +3,7 @@ import { Model } from 'sequelize';
 import { Table, Column } from '../lib';
 import { Entry } from './entry.model';
 
-@Table({ tableName: 'entries' })
+@Table({ tableName: 'invoices' })
 export class Invoice extends Model {
   public readonly id: number;
 

@@ -7,7 +7,7 @@ export default class EntryController {
   entry: Entry;
 
   @Route.Param('entryId')
-  async userId(entryId: string): Promise<void> {
+  async findById(entryId: string): Promise<void> {
     const entry: Entry | null = await Entry.findByPk(entryId);
 
     if (!entry) {

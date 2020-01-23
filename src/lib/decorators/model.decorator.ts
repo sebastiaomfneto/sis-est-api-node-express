@@ -1,12 +1,11 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
 import { ModelBelongsToMetadata, ModelHasOneMetadata, ModelHasManyMetadata, ModelBelongsToManyMetadata } from '../interfaces/model-metadata';
 
-const { DATABASE_PATH, NODE_ENV } = process.env;
+const { DATABASE_PATH } = process.env;
 
 const sequelize: Sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: DATABASE_PATH,
-  logging: NODE_ENV !== 'production',
+  storage: DATABASE_PATH
 });
 
 sequelize.authenticate().catch((e: Error) => {

@@ -19,7 +19,7 @@ server.use(async (_req: express.Request, _res: express.Response, next: express.N
 });
 
 server.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  res.status(err.status || 500).json(err.message);
+  res.status(err.status || 500).json(err.stack);
 });
 
 export function Application(): ClassDecorator {

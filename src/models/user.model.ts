@@ -1,14 +1,16 @@
-import { Model, DataTypes } from "sequelize/types";
+import { Model, DataTypes } from 'sequelize';
 
 import { Table, Column } from '../lib';
 
-enum UserRole {
+export enum UserRole {
   USER = 'user',
   ADMIN = 'admin'
 }
 
 @Table({ tableName: 'users' })
 export class User extends Model {
+  public readonly id: number;
+
   @Column({ type: DataTypes.STRING(100) })
   userName: string;
 
@@ -17,4 +19,7 @@ export class User extends Model {
 
   @Column({ type: DataTypes.ENUM('user', 'admin') })
   role: UserRole;
+
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 }

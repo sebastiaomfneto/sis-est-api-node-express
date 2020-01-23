@@ -1,0 +1,1915 @@
+{
+	"info": {
+		"_postman_id": "8ac67302-6402-4496-a38b-b3f9b58dc225",
+		"name": "sistema-estacionamento-api-node-express-ts",
+		"description": "POC API Sistema de estacionamento com Node/Express/Typescript",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var data = pm.response.json();",
+									"    pm.environment.set(\"USER_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userName\": \"test\",\n\t\"password\": \"test\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/users",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"test\",\n\t\"password\": \"test\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/users",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "122"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7a-/dfxL0279nu5KtxkabTeeu+wpk8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:38:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"userName\": \"test\",\n    \"password\": \"test\",\n    \"updatedAt\": \"2020-01-23T20:38:38.732Z\",\n    \"createdAt\": \"2020-01-23T20:38:38.732Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userName\": \"test\",\n\t\"password\": \"test\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/users/{{USER_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"test\",\n\t\"password\": \"test\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/users/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "134"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"86-u0NG5nXurqFii6uOkZK2wq2GpEI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:39:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"userName\": \"test\",\n    \"password\": \"test\",\n    \"role\": null,\n    \"createdAt\": \"2020-01-23T20:38:38.732Z\",\n    \"updatedAt\": \"2020-01-23T20:38:38.732Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/users",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "index",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/users",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "136"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"88-AQum3ACvqWQoqHPwaFhRCbHnw2Y\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:39:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"userName\": \"test\",\n        \"password\": \"test\",\n        \"role\": null,\n        \"createdAt\": \"2020-01-23T20:38:38.732Z\",\n        \"updatedAt\": \"2020-01-23T20:38:38.732Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "find",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/users/{{USER_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "find",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/users/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "134"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"86-u0NG5nXurqFii6uOkZK2wq2GpEI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:40:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"userName\": \"test\",\n    \"password\": \"test\",\n    \"role\": null,\n    \"createdAt\": \"2020-01-23T20:38:38.732Z\",\n    \"updatedAt\": \"2020-01-23T20:38:38.732Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "remove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a01bca61-5114-4fe9-a89d-6908e8857903",
+								"exec": [
+									"var request = {",
+									"    url: pm.variables.get('API_URI') + '/users',",
+									"    method: 'POST',",
+									"    header: {",
+									"        'content-type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        'mode': 'raw',",
+									"        'raw': JSON.stringify({",
+									"            \"userName\": \"test\",",
+									"\t        \"password\": \"test\"    ",
+									"        })",
+									"\t    ",
+									"\t}",
+									"};",
+									"",
+									"pm.sendRequest(request, function (err, response) {",
+									"    var data = response.json();",
+									"    ",
+									"    pm.environment.set(\"USER_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/users/{{USER_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "remove",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/users/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:40:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Parameters",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var data = pm.response.json();",
+									"    pm.environment.set(\"PARAMETER_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"logo\": \"\",\n\t\"suggestInitialDate\": false,\n\t\"valuePerHour\": 10\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/parameters",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"parameters"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"logo\": \"\",\n\t\"suggestInitialDate\": false,\n\t\"valuePerHour\": 10\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/parameters",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"parameters"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "141"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8d-cIzrS/oVWcaADApatEUq6V1g5j8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:31:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"logo\": \"\",\n    \"suggestInitialDate\": false,\n    \"valuePerHour\": 10,\n    \"updatedAt\": \"2020-01-23T20:31:10.308Z\",\n    \"createdAt\": \"2020-01-23T20:31:10.308Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"logo\": \"\",\n\t\"suggestInitialDate\": false,\n\t\"valuePerHour\": 10\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/parameters/{{PARAMETER_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"parameters",
+								"{{PARAMETER_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"logo\": \"\",\n\t\"suggestInitialDate\": false,\n\t\"valuePerHour\": 10\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/parameters/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"parameters",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "141"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8d-iyNG23IvRYbydo0fW8Xq6ID5EMg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:33:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"logo\": \"\",\n    \"suggestInitialDate\": false,\n    \"valuePerHour\": 10,\n    \"createdAt\": \"2020-01-23T20:31:10.308Z\",\n    \"updatedAt\": \"2020-01-23T20:31:10.308Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/parameters",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"parameters"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "index",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/parameters",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"parameters"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "143"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8f-m0Gnx8iOobZnUXUAG7ooM9ZpbOs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:34:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"logo\": \"\",\n        \"suggestInitialDate\": false,\n        \"valuePerHour\": 10,\n        \"createdAt\": \"2020-01-23T20:31:10.308Z\",\n        \"updatedAt\": \"2020-01-23T20:31:10.308Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "find",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/parameters/{{PARAMETER_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"parameters",
+								"{{PARAMETER_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "find",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/parameters/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"parameters",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "141"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8d-iyNG23IvRYbydo0fW8Xq6ID5EMg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:34:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"logo\": \"\",\n    \"suggestInitialDate\": false,\n    \"valuePerHour\": 10,\n    \"createdAt\": \"2020-01-23T20:31:10.308Z\",\n    \"updatedAt\": \"2020-01-23T20:31:10.308Z\"\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Entries",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var data = pm.response.json();",
+									"    pm.environment.set(\"ENTRY_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicencePlate\": \"ABC-1234\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/entries",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicencePlate\": \"ABC-1234\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/entries",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"entries"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "195"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c3-DUH+JA5s/V3IJynVtLH3tyN0Ebk\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 19:49:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-1234\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-4321\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/entries/{{ENTRY_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"entries",
+								"{{ENTRY_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-4321\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/entries/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"entries",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "195"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c3-silY0h9SQTtPKGYweGXPsjntyEo\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 19:59:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-4321\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:59:49.501Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/entries",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "index",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/entries",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"entries"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "589"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24d-DzD8dbV8Y/Sm8wJ/9rm76G+vvIY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 19:57:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n        \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n        \"carLicencePlate\": \"ABC-1234\",\n        \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n        \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n    },\n    {\n        \"id\": 2,\n        \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n        \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n        \"carLicencePlate\": \"ABC-1234\",\n        \"createdAt\": \"2020-01-23T19:51:52.515Z\",\n        \"updatedAt\": \"2020-01-23T19:51:52.515Z\"\n    },\n    {\n        \"id\": 3,\n        \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n        \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n        \"carLicencePlate\": \"ABC-1234\",\n        \"createdAt\": \"2020-01-23T19:53:11.405Z\",\n        \"updatedAt\": \"2020-01-23T19:53:11.405Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "find",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/entries/{{ENTRY_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"entries",
+								"{{ENTRY_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "find",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/entries/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"entries",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "195"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c3-TH3Mf/4kGhQ5zNhu5IZDiQAo2K0\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 19:58:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-1234\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "remove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/entries/{{ENTRY_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"entries",
+								"{{ENTRY_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "remove",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/entries/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"entries",
+										"1"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:01:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Invoices",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6ee7eb70-102d-4a62-af0b-2a61e287c8ff",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var data = pm.response.json();",
+									"    pm.environment.set(\"INVOICE_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a29d9da5-12b8-48f5-8811-d54be7c0e1b7",
+								"exec": [
+									"var request = {",
+									"    url: pm.variables.get('API_URI') + '/entries',",
+									"    method: 'POST',",
+									"    header: {",
+									"        'content-type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        'mode': 'raw',",
+									"        'raw': JSON.stringify({",
+									"            \"initialDate\": \"2020-01-23T19:48:52.044Z\",",
+									"        \t\"finalDate\": \"2020-01-23T19:48:52.044Z\",",
+									"        \t\"carLicencePlate\": \"ABC-1234\"   ",
+									"        })",
+									"\t    ",
+									"\t}",
+									"};",
+									"",
+									"pm.sendRequest(request, function (err, response) {",
+									"    var data = response.json();",
+									"    ",
+									"    pm.environment.set(\"ENTRY_ID\", data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"entryId\": {{ENTRY_ID}},\n\t\"totalValue\": 10\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/invoices",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"invoices"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"entryId\": 2,\n\t\"totalValue\": 10\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/invoices",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"invoices"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "113"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"71-n+ZjxgOnbBUOWyNQTAkuaBYNL0I\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:34:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"entryId\": 2,\n    \"totalValue\": 0,\n    \"updatedAt\": \"2020-01-23T20:34:57.518Z\",\n    \"createdAt\": \"2020-01-23T20:34:57.518Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/invoices",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"invoices"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "index",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/invoices",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"invoices"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "115"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"73-CliMaZia0IzBHF42rT7KtR6GcVE\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:36:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"entryId\": 2,\n        \"totalValue\": 0,\n        \"createdAt\": \"2020-01-23T20:34:57.518Z\",\n        \"updatedAt\": \"2020-01-23T20:34:57.518Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "find",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/invoices/{{INVOICE_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"invoices",
+								"{{INVOICE_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "find",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/invoices/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"invoices",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "113"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"71-SwV1sgzDURGWRrWrmBop/iCueRU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:36:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"entryId\": 2,\n    \"totalValue\": 0,\n    \"createdAt\": \"2020-01-23T20:34:57.518Z\",\n    \"updatedAt\": \"2020-01-23T20:34:57.518Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "remove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7876ef91-74d8-409a-a863-9e44f0228668",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/invoices/{{INVOICE_ID}}",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"invoices",
+								"{{INVOICE_ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "remove",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URI}}/invoices/1",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"invoices",
+										"1"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Jan 2020 20:37:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6c5a60d9-927e-48d9-bf9b-f79447e1fd96",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "76bd60c4-d878-4068-a298-d061e9f68cbb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "a78c4846-7bdb-4359-803e-8b647a3a9f97",
+			"key": "API_URI",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"id": "f8382056-4bb7-4053-862f-4d89173d1da6",
+			"key": "USER_ID",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"id": "43e9df5a-7744-42d8-bf08-531779e905c1",
+			"key": "PARAMETER_ID",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"id": "ac961e09-93fe-4c15-8c98-7ba537a28617",
+			"key": "ENTRY_ID",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"id": "7a11a090-452d-43d9-874f-ee63e94be166",
+			"key": "INVOICE_ID",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"id": "217f5398-dd3b-4536-abbd-8c47eced4145",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

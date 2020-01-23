@@ -14,7 +14,7 @@ function withStatus(status: number): express.Handler {
 }
 
 function withHandler(target: Object, key: PropertyKey, descriptor: PropertyDescriptor): express.Handler {
-  return async (req: express.Request, res: express.Response): Promise<void> => {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     if (target[REQUEST_REQUEST]?.key) {
       Object.defineProperty(target, target[REQUEST_REQUEST].key, {
         configurable: true,
@@ -55,7 +55,7 @@ function withHandler(target: Object, key: PropertyKey, descriptor: PropertyDescr
 
       res.json(data);
     } catch (e) {
-      res.status(e.status || 500).json(e.message);
+      next(e);
     }
   }
 }
