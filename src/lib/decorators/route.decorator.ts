@@ -3,6 +3,8 @@ import express from 'express';
 import { REQUEST_REQUEST, REQUEST_PARAMS, REQUEST_QUERIES, REQUEST_BODIES } from './request.decorator';
 import { RESPONSE_RESPONSE } from './response.decorator';
 
+import { RequestMetadata } from '../interfaces/request-metadata';
+
 function withStatus(status: number): express.Handler {
   return (_req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.status(status);
@@ -33,18 +35,18 @@ function withHandler(target: Object, key: PropertyKey, descriptor: PropertyDescr
 
     const args: any[] = [];
 
-    (target[REQUEST_PARAMS] || []).filter((i: any) => i.key === key)
-      .forEach((p: any) => {
-        args[p.index] = req.params[p.name];
+    (target[REQUEST_PARAMS] || []).filter((i: RequestMetadata) => i.key === key)
+      .forEach((p: RequestMetadata) => {
+        args[p.index] = req.params[p.name as string];
       });
 
-    (target[REQUEST_QUERIES] || []).filter((i: any) => i.key === key)
-      .forEach((q: any) => {
-        args[q.index] = req.query[q.name];
+    (target[REQUEST_QUERIES] || []).filter((i: RequestMetadata) => i.key === key)
+      .forEach((q: RequestMetadata) => {
+        args[q.index] = req.query[q.name as string];
       });
 
-    (target[REQUEST_BODIES] || []).filter((i: any) => i.key === key)
-      .forEach((b: any) => {
+    (target[REQUEST_BODIES] || []).filter((i: RequestMetadata) => i.key === key)
+      .forEach((b: RequestMetadata) => {
         args[b.index] = req.body;
       });
 

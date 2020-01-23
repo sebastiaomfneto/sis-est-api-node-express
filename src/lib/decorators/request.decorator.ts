@@ -8,7 +8,7 @@ export const REQUEST_BODIES: symbol = Symbol('REQUEST_BODIES');
 
 export function Request(): PropertyDecorator {
   return function (target: Object, key: PropertyKey): void {
-    target[REQUEST_REQUEST] = { key }
+    target[REQUEST_REQUEST] = { key };
   }
 }
 
