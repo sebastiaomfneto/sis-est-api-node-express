@@ -1,2 +1,2 @@
-# sistema-estacionamento-node-express-typescript
-POC Sistema de Estacionamento com Node/Express/Typescript
+# sistema-estacionamento-api-node-express-ts
+POC API Sistema de estacionamento com Node/Express/Typescript
