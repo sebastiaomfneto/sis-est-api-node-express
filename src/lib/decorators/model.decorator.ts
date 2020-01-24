@@ -1,13 +1,11 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
 import { ModelBelongsToMetadata, ModelHasOneMetadata, ModelHasManyMetadata, ModelBelongsToManyMetadata } from '../interfaces/model-metadata';
 import { ModelHooks } from 'sequelize/types/lib/hooks';
+import * as sequelizeConfig from '../../../db/config/config.js';
 
-const { DATABASE_PATH } = process.env;
+const { NODE_ENV = 'development' } = process.env;
 
-const sequelize: Sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: DATABASE_PATH
-});
+const sequelize: Sequelize = new Sequelize(sequelizeConfig[NODE_ENV]);
 
 sequelize.authenticate().catch((e: Error) => {
   console.error(e.message);

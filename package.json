@@ -4,7 +4,11 @@
   "description": "POC Sistema de Estacionamento com Node/Express/Typescript",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon",
+    "migration:generate": "sequelize migration:generate",
+    "seed:generate": "sequelize seed:generate",
+    "db:migrate": "sequelize db:migrate",
+    "db:seed:all": "sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -31,6 +35,7 @@
     "@types/jsonwebtoken": "^8.3.7",
     "@types/sequelize": "^4.28.8",
     "nodemon": "^2.0.2",
+    "sequelize-cli": "^5.5.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },

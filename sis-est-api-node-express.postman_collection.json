@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "8ac67302-6402-4496-a38b-b3f9b58dc225",
-		"name": "sistema-estacionamento-api-node-express-ts",
+		"name": "sis-est-api-node-express",
 		"description": "POC API Sistema de estacionamento com Node/Express/Typescript",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -118,6 +118,120 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"id\": 1,\n    \"userName\": \"test\",\n    \"password\": \"test\",\n    \"updatedAt\": \"2020-01-23T20:38:38.732Z\",\n    \"createdAt\": \"2020-01-23T20:38:38.732Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3cc34897-e98b-4f6a-b588-aac62f07c076",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var data = pm.response.json();",
+									"    pm.environment.set(\"AUTH_TOKEN\", data);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userName\": \"admin\",\n\t\"password\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/users/login",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"test\",\n\t\"password\": \"test\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URI}}/users/login",
+									"host": [
+										"{{API_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"45-Jki91f+VN7ZH+w6BJHI4XMVDITI\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 24 Jan 2020 00:34:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "\"eyJhbGciOiJIUzI1NiJ9.Mg.HSyZK7J99A_UrZoIJqAICgs0AKdS8T6RAJ0cpBPy7qM\""
 						}
 					]
 				},
@@ -981,7 +1095,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicencePlate\": \"ABC-1234\"\n}"
+							"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicensePlate\": \"ABC1234\"\n}"
 						},
 						"url": {
 							"raw": "{{API_URI}}/entries",
@@ -1012,7 +1126,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicencePlate\": \"ABC-1234\"\n}"
+									"raw": "{\n\t\"initialDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"finalDate\": \"2020-01-23T19:48:52.044Z\",\n\t\"carLicensePlate\": \"ABC1234\"\n}"
 								},
 								"url": {
 									"raw": "{{API_URI}}/entries",
@@ -1038,15 +1152,15 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "195"
+									"value": "194"
 								},
 								{
 									"key": "ETag",
-									"value": "W/\"c3-DUH+JA5s/V3IJynVtLH3tyN0Ebk\""
+									"value": "W/\"c2-8U7ZxnNy8n/3GvVDGBYoFAAjwis\""
 								},
 								{
 									"key": "Date",
-									"value": "Thu, 23 Jan 2020 19:49:11 GMT"
+									"value": "Fri, 24 Jan 2020 14:48:44 GMT"
 								},
 								{
 									"key": "Connection",
@@ -1054,7 +1168,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-1234\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+							"body": "{\n    \"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicensePlate\": \"ABC1234\",\n    \"updatedAt\": \"2020-01-24T14:48:44.229Z\",\n    \"createdAt\": \"2020-01-24T14:48:44.229Z\"\n}"
 						}
 					]
 				},
@@ -1090,7 +1204,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicencePlate\": \"ABC-4321\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n}"
+							"raw": "{\n\t\"id\": 1,\n    \"initialDate\": \"2020-01-23T19:48:52.044Z\",\n    \"finalDate\": \"2020-01-23T19:48:52.044Z\",\n    \"carLicensePlate\": \"ABC-4321\",\n    \"createdAt\": \"2020-01-23T19:49:11.406Z\",\n    \"updatedAt\": \"2020-01-23T19:49:11.406Z\"\n}"
 						},
 						"url": {
 							"raw": "{{API_URI}}/entries/{{ENTRY_ID}}",
@@ -1463,18 +1577,20 @@
 							"script": {
 								"id": "a29d9da5-12b8-48f5-8811-d54be7c0e1b7",
 								"exec": [
+									"var token = pm.variables.get(\"AUTH_TOKEN\"); ",
 									"var request = {",
 									"    url: pm.variables.get('API_URI') + '/entries',",
 									"    method: 'POST',",
 									"    header: {",
-									"        'content-type': 'application/json'",
+									"        'content-type': 'application/json',",
+									"        'authorization': 'Bearer ' + token",
 									"    },",
 									"    body: {",
 									"        'mode': 'raw',",
 									"        'raw': JSON.stringify({",
 									"            \"initialDate\": \"2020-01-23T19:48:52.044Z\",",
 									"        \t\"finalDate\": \"2020-01-23T19:48:52.044Z\",",
-									"        \t\"carLicencePlate\": \"ABC-1234\"   ",
+									"        \t\"carLicensePlate\": \"ABC-1234\"   ",
 									"        })",
 									"\t    ",
 									"\t}",
@@ -1506,7 +1622,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"entryId\": {{ENTRY_ID}},\n\t\"totalValue\": 10\n}"
+							"raw": "{\n\t\"entryId\": \"{{ENTRY_ID}}\",\n\t\"totalValue\": 10\n}"
 						},
 						"url": {
 							"raw": "{{API_URI}}/invoices",
@@ -1852,6 +1968,16 @@
 			"protocolProfileBehavior": {}
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{AUTH_TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -1859,7 +1985,27 @@
 				"id": "6c5a60d9-927e-48d9-bf9b-f79447e1fd96",
 				"type": "text/javascript",
 				"exec": [
-					""
+					"var request = {",
+					"    url: pm.variables.get('API_URI') + '/users/login',",
+					"    method: 'POST',",
+					"    header: {",
+					"        'content-type': 'application/json'",
+					"    },",
+					"    body: {",
+					"        'mode': 'raw',",
+					"        'raw': JSON.stringify({",
+					"            \"userName\": \"admin\",",
+					"\t        \"password\": \"admin\"    ",
+					"        })",
+					"\t    ",
+					"\t}",
+					"};",
+					"",
+					"pm.sendRequest(request, function (err, response) {",
+					"    var data = response.json();",
+					"    ",
+					"    pm.environment.set(\"AUTH_TOKEN\", data);",
+					"});"
 				]
 			}
 		},
@@ -1876,37 +2022,38 @@
 	],
 	"variable": [
 		{
-			"id": "a78c4846-7bdb-4359-803e-8b647a3a9f97",
+			"id": "cc12d39e-fd94-46ec-96cb-32625e3d1b3d",
 			"key": "API_URI",
 			"value": "http://localhost:3000",
 			"type": "string"
 		},
 		{
-			"id": "f8382056-4bb7-4053-862f-4d89173d1da6",
+			"id": "f5e7366b-2178-4c3d-91c4-dfe91a601993",
 			"key": "USER_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "43e9df5a-7744-42d8-bf08-531779e905c1",
+			"id": "ac83de32-d4e2-4632-99cb-36d013972b72",
 			"key": "PARAMETER_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "ac961e09-93fe-4c15-8c98-7ba537a28617",
+			"id": "871de256-bb84-48cd-8cf3-86490f22211c",
 			"key": "ENTRY_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "7a11a090-452d-43d9-874f-ee63e94be166",
+			"id": "511ee850-6140-439e-8d85-a020e3d0b00a",
 			"key": "INVOICE_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "217f5398-dd3b-4536-abbd-8c47eced4145",
+			"id": "d22223c8-8804-4e6a-9f84-6d1463f3f760",
+			"key": "AUTH_TOKEN",
 			"value": "",
 			"type": "string"
 		}

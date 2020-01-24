@@ -3,18 +3,18 @@ import { Model, DataTypes } from 'sequelize';
 import { Table, Column } from '../lib';
 import { Invoice } from './invoice.model';
 
-@Table({ tableName: 'entries' })
+@Table({ tableName: 'Entries' })
 export class Entry extends Model {
   public readonly id: number;
 
-  @Column({ type: DataTypes.DATE })
+  @Column({ type: DataTypes.DATE, allowNull: false })
   public initialDate: Date;
 
   @Column({ type: DataTypes.DATE })
   public finalDate: Date;
 
-  @Column({ type: DataTypes.STRING(7) })
-  public carLicencePlate: string;
+  @Column({ type: DataTypes.STRING(7), allowNull: false })
+  public carLicensePlate: string;
 
   @Column.HasOne(Invoice, { foreignKey: 'entryId' })
   public invoice: Invoice;

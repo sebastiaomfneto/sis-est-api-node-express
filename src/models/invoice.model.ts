@@ -1,16 +1,16 @@
-import { Model } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import { Table, Column } from '../lib';
 import { Entry } from './entry.model';
 
-@Table({ tableName: 'invoices' })
+@Table({ tableName: 'Invoices' })
 export class Invoice extends Model {
   public readonly id: number;
 
-  @Column({ type: 'INTEGER' })
+  @Column({ type: DataTypes.INTEGER, allowNull: false })
   public entryId: number;
 
-  @Column({ type: 'DECIMAL' })
+  @Column({ type: DataTypes.DECIMAL, allowNull: false })
   public totalValue: number;
 
   @Column.BelongsTo(Invoice, { foreignKey: 'entryId' })

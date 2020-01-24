@@ -1,6 +1,5 @@
 import bcryptjs from 'bcryptjs'
 import { Model, DataTypes } from 'sequelize';
-
 import { Table, Column, Hook } from '../lib';
 
 export enum UserRole {
@@ -13,7 +12,7 @@ export interface UserLogin {
   password: string;
 }
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'Users' })
 export class User extends Model {
   public readonly id: number;
 

@@ -1,8 +1,8 @@
 export class NotFoundError extends Error {
   status: number = 404;
-  message: string = 'Not Found';
+  message: string;
 
-  constructor(message?: string) {
+  constructor(message: string = 'Not Found') {
     super(message);
   }
 }
