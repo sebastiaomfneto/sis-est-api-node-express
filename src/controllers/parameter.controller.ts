@@ -1,4 +1,4 @@
-import { Route, Request } from '../lib';
+import { Route, Request, Authentication } from '../lib';
 import { NotFoundError, BadRequestError } from '../lib/errors';
 
 import { Parameter } from '../models';
@@ -18,16 +18,19 @@ export class ParameterController {
   }
 
   @Route.Get('/parameters')
+  @Authentication.Authenticate()
   async index(): Promise<Parameter[]> {
     return await Parameter.findAll();
   }
 
   @Route.Get('/parameters/:parameterId')
+  @Authentication.Authenticate()
   async find(): Promise<Parameter> {
     return this.parameter;
   }
 
   @Route.Post('/parameters')
+  @Authentication.Authenticate()
   async create(@Request.Body() body: Partial<Parameter>): Promise<Parameter> {
     try {
       return await Parameter.create(body);
@@ -37,6 +40,7 @@ export class ParameterController {
   }
 
   @Route.Put('/parameters/:parameterId')
+  @Authentication.Authenticate()
   async update(@Request.Body() body: Partial<Parameter>): Promise<Parameter> {
     await this.parameter.update(body);
 

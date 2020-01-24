@@ -1,4 +1,4 @@
-import { Route, Request } from '../lib';
+import { Route, Authentication, Request } from '../lib';
 import { NotFoundError, BadRequestError } from '../lib/errors';
 
 import { Entry } from '../models';
@@ -18,16 +18,19 @@ export default class EntryController {
   }
 
   @Route.Get('/entries')
+  @Authentication.Authenticate()
   async index(): Promise<Entry[]> {
     return await Entry.findAll();
   }
 
   @Route.Get('/entries/:entryId')
+  @Authentication.Authenticate()
   async find(): Promise<Entry> {
     return this.entry;
   }
 
   @Route.Post('/entries')
+  @Authentication.Authenticate()
   async create(@Request.Body() body: Partial<Entry>): Promise<Entry> {
     try {
       return await Entry.create(body);
@@ -37,6 +40,7 @@ export default class EntryController {
   }
 
   @Route.Put('/entries/:entryId')
+  @Authentication.Authenticate()
   async update(@Request.Body() body: Partial<Entry>): Promise<Entry> {
     await this.entry.update(body);
 
@@ -44,6 +48,7 @@ export default class EntryController {
   }
 
   @Route.Delete('/entries/:entryId')
+  @Authentication.Authenticate()
   async remove(): Promise<void> {
     await this.entry.destroy();
   }

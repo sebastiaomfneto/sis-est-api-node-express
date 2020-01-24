@@ -1,5 +1,6 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
 import { ModelBelongsToMetadata, ModelHasOneMetadata, ModelHasManyMetadata, ModelBelongsToManyMetadata } from '../interfaces/model-metadata';
+import { ModelHooks } from 'sequelize/types/lib/hooks';
 
 const { DATABASE_PATH } = process.env;
 
@@ -39,21 +40,33 @@ Column.BelongsTo = function (model: ModelCtor<Model>, options: BelongsToOptions)
   }
 }
 
-Column.HasOne = function (model: ModelCtor<Model>, options: HasOneOptions) {
+Column.HasOne = function (model: ModelCtor<Model>, options: HasOneOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
     target[MODEL_HAS_ONE] = (target[MODEL_HAS_ONE] || []).concat({ model, options });
   }
 }
 
-Column.HasMany = function (model: ModelCtor<Model>, options: HasManyOptions) {
+Column.HasMany = function (model: ModelCtor<Model>, options: HasManyOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
     target[MODEL_HAS_MANY] = (target[MODEL_HAS_MANY] || []).concat({ model, options });
   }
 }
 
-Column.BelongsToMany = function (model: ModelCtor<Model>, options: BelongsToManyOptions) {
+Column.BelongsToMany = function (model: ModelCtor<Model>, options: BelongsToManyOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
     target[MODEL_BELONGS_TO_MANY] = (target[MODEL_BELONGS_TO_MANY] || []).concat({ model, options });
+  }
+}
+
+export function Validate(): MethodDecorator {
+  return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
+    target[MODEL_VALIDATES] = (target[MODEL_VALIDATES] || []).concat({ [key]: descriptor.value.bind(target) });
+  }
+}
+
+export function Hook(name: keyof ModelHooks): MethodDecorator {
+  return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
+    target[MODEL_HOOKS] = (target[MODEL_HOOKS] || []).concat({ name, handler: descriptor.value.bind(target) });
   }
 }
 
@@ -73,26 +86,37 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
 
     const validate: ModelValidateOptions = (target.prototype[MODEL_VALIDATES] || []).reduce((ag: object, i: Partial<ModelValidateOptions>) => ({ ...ag, ...i }), {});
 
+    const hooks: ModelHooks = (target[MODEL_HOOKS] || []).reduce(
+      (ag: object, i: any) => {
+        const { name, handler } = i;
+
+        return {
+          ...ag,
+          [name]: handler
+        }
+      },
+      {});
+
     (target as ModelCtor<Model>).init(modelAttributes, {
       ...modelOptions,
       validate,
-      hooks: (target[MODEL_HOOKS] || {}),
+      hooks,
       sequelize
     });
 
-    (target[MODEL_BELONGS_TO] || []).forEach((b: ModelBelongsToMetadata) => {
+    (target.prototype[MODEL_BELONGS_TO] || []).forEach((b: ModelBelongsToMetadata) => {
       (target as ModelCtor<Model>).belongsTo(b.model, b.options);
     });
 
-    (target[MODEL_HAS_ONE] || []).forEach((b: ModelHasOneMetadata) => {
+    (target.prototype[MODEL_HAS_ONE] || []).forEach((b: ModelHasOneMetadata) => {
       (target as ModelCtor<Model>).hasOne(b.model, b.options);
     });
 
-    (target[MODEL_HAS_MANY] || []).forEach((b: ModelHasManyMetadata) => {
+    (target.prototype[MODEL_HAS_MANY] || []).forEach((b: ModelHasManyMetadata) => {
       (target as ModelCtor<Model>).hasMany(b.model, b.options);
     });
 
-    (target[MODEL_BELONGS_TO_MANY] || []).forEach((b: ModelBelongsToManyMetadata) => {
+    (target.prototype[MODEL_BELONGS_TO_MANY] || []).forEach((b: ModelBelongsToManyMetadata) => {
       (target as ModelCtor<Model>).belongsToMany(b.model, b.options);
     });
 
@@ -100,17 +124,5 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
       console.error(e.message);
       process.exit(1);
     });
-  }
-}
-
-export function Validate(): MethodDecorator {
-  return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    target[MODEL_VALIDATES] = (target[MODEL_VALIDATES] || []).concat({ [key]: descriptor.value.bind(target) });
-  }
-}
-
-export function Hook(name: string): MethodDecorator {
-  return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
-    target[MODEL_HOOKS] = (target[MODEL_HOOKS] || {})[name] = descriptor.value.bind(target);
   }
 }

@@ -1,11 +1,20 @@
 import express from 'express';
-
+import { Model, ModelCtor } from 'sequelize';
 import { REQUEST_REQUEST, REQUEST_PARAMS, REQUEST_QUERIES, REQUEST_BODIES } from './request.decorator';
 import { RESPONSE_RESPONSE } from './response.decorator';
-
+import { AUTHENTICATION_AUTHENTICATE, getJwtTokenPayload, AUTHENTICATION_USER } from './authentication.decorator';
 import { RequestMetadata } from '../interfaces/request-metadata';
+import { UnauthorizedError } from '../errors';
 
-function withStatus(status: number): express.Handler {
+declare global {
+  namespace Express {
+    interface Request {
+      user?: Model
+    }
+  }
+}
+
+function buildStatusHandler(status: number): express.Handler {
   return (_req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.status(status);
 
@@ -13,7 +22,39 @@ function withStatus(status: number): express.Handler {
   }
 }
 
-function withHandler(target: Object, key: PropertyKey, descriptor: PropertyDescriptor): express.Handler {
+function buildAuthenticationHandler(target: Object, key: PropertyKey): express.Handler {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    if ((target[AUTHENTICATION_AUTHENTICATE] || []).find((i: any) => i.key === key)) {
+      const { User }: { User: ModelCtor<Model> } = require('../../models/user.model');
+
+      try {
+        const token: string | undefined = req.headers.authorization?.replace(/Bearer\s/g, '');
+
+        if (!token) {
+          throw new UnauthorizedError();
+        }
+
+        const jwtPayload: string = getJwtTokenPayload(token) as string;
+
+        const user: Model | null = await User.findByPk(jwtPayload);
+
+        if (!user) {
+          throw new UnauthorizedError();
+        }
+
+        req.user = user;
+
+        next();
+      } catch (e) {
+        next(e);
+      }
+    } else {
+      next();
+    }
+  }
+}
+
+function buildFinalHandler(target: Object, key: PropertyKey, descriptor: PropertyDescriptor): express.Handler {
   return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     if (target[REQUEST_REQUEST]?.key) {
       Object.defineProperty(target, target[REQUEST_REQUEST].key, {
@@ -50,6 +91,11 @@ function withHandler(target: Object, key: PropertyKey, descriptor: PropertyDescr
         args[b.index] = req.body;
       });
 
+    (target[AUTHENTICATION_USER] || []).filter((i: any) => i.key === key)
+      .forEach((u: RequestMetadata) => {
+        args[u.index] = req.user;
+      });
+
     try {
       const data: any = await descriptor.value.call(target, ...args);
 
@@ -80,25 +126,25 @@ Route.Param = function (name: string): MethodDecorator {
 
 Route.Get = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).get(withHandler(target, key, descriptor));
+    router.route(path).get(buildAuthenticationHandler(target, key), buildFinalHandler(target, key, descriptor));
   }
 }
 
 Route.Post = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).post(withStatus(201), withHandler(target, key, descriptor)
+    router.route(path).post(buildAuthenticationHandler(target, key), buildStatusHandler(201), buildFinalHandler(target, key, descriptor)
     );
   }
 }
 
 Route.Put = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).put(withHandler(target, key, descriptor));
+    router.route(path).put(buildAuthenticationHandler(target, key), buildFinalHandler(target, key, descriptor));
   }
 }
 
 Route.Delete = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).delete(withStatus(204), withHandler(target, key, descriptor));
+    router.route(path).delete(buildAuthenticationHandler(target, key), buildStatusHandler(204), buildFinalHandler(target, key, descriptor));
   }
 }
