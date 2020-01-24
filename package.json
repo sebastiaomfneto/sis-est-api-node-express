@@ -1,5 +1,5 @@
 {
-  "name": "sistema-estacionamento-api-node-express-ts",
+  "name": "sis-est-api-node-express",
   "version": "1.0.0",
   "description": "POC Sistema de Estacionamento com Node/Express/Typescript",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smfnto/sistema-estacionamento-api-node-express-ts.git"
+    "url": "git+https://github.com/smfnto/sis-est-api-node-express.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/smfnto/sistema-estacionamento-api-node-express-ts/issues"
+    "url": "https://github.com/smfnto/sis-est-api-node-express/issues"
   },
-  "homepage": "https://github.com/smfnto/sistema-estacionamento-api-node-express-ts#readme",
+  "homepage": "https://github.com/smfnto/sis-est-api-node-express#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
