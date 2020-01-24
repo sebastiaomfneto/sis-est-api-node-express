@@ -550,27 +550,7 @@
 							"script": {
 								"id": "a01bca61-5114-4fe9-a89d-6908e8857903",
 								"exec": [
-									"var request = {",
-									"    url: pm.variables.get('API_URI') + '/users',",
-									"    method: 'POST',",
-									"    header: {",
-									"        'content-type': 'application/json'",
-									"    },",
-									"    body: {",
-									"        'mode': 'raw',",
-									"        'raw': JSON.stringify({",
-									"            \"userName\": \"test\",",
-									"\t        \"password\": \"test\"    ",
-									"        })",
-									"\t    ",
-									"\t}",
-									"};",
-									"",
-									"pm.sendRequest(request, function (err, response) {",
-									"    var data = response.json();",
-									"    ",
-									"    pm.environment.set(\"USER_ID\", data.id);",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -2022,37 +2002,37 @@
 	],
 	"variable": [
 		{
-			"id": "cc12d39e-fd94-46ec-96cb-32625e3d1b3d",
+			"id": "67a8f33b-74c1-4c72-9113-cee5055499a9",
 			"key": "API_URI",
 			"value": "http://localhost:3000",
 			"type": "string"
 		},
 		{
-			"id": "f5e7366b-2178-4c3d-91c4-dfe91a601993",
+			"id": "ba56d418-78b1-49ec-a184-33ad0f76f154",
 			"key": "USER_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "ac83de32-d4e2-4632-99cb-36d013972b72",
+			"id": "e063fd41-4fa0-418a-bce9-8ac39a1f44c9",
 			"key": "PARAMETER_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "871de256-bb84-48cd-8cf3-86490f22211c",
+			"id": "7264a65c-094c-4d8d-9a1c-d2f69c955898",
 			"key": "ENTRY_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "511ee850-6140-439e-8d85-a020e3d0b00a",
+			"id": "1a098954-9998-4585-ae6f-f11f4ae64441",
 			"key": "INVOICE_ID",
 			"value": "1",
 			"type": "string"
 		},
 		{
-			"id": "d22223c8-8804-4e6a-9f84-6d1463f3f760",
+			"id": "9e86933c-d6e9-4d1b-8980-c0b49616cc2e",
 			"key": "AUTH_TOKEN",
 			"value": "",
 			"type": "string"

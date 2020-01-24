@@ -1,67 +1,70 @@
-import { Route, Request, buildJwtToken, Authentication, Authorization } from '../lib';
-import { NotFoundError, BadRequestError, UnauthorizedError } from '../lib/errors';
+import { Request, Response, NextFunction } from 'express';
+import { Route, buildJwtToken, Authentication, Authorization } from '../lib';
+import { NotFoundError } from '../lib/errors';
 
-import { User, UserLogin, UserRole } from '../models';
+import { User, UserRole } from '../models';
 
 export class UserController {
   user: User;
 
   @Route.Param('userId')
-  async findById(userId: string): Promise<void> {
-    const user: User | null = await User.findByPk(userId);
+  async findById(req: Request, _res: Response, next: NextFunction): Promise<void> {
+    const user: User | null = await User.findByPk(req.params.userId);
 
     if (!user) {
       throw new NotFoundError();
     }
 
     this.user = user;
+
+    next();
   }
 
   @Route.Get('/users')
   @Authentication.Authenticate()
-  async index(): Promise<User[]> {
-    return await User.findAll();
+  async index(_req: Request, res: Response): Promise<void> {
+    const users: User[] = await User.findAll();
+
+    res.json(users);
   }
 
   @Route.Get('/users/:userId')
   @Authentication.Authenticate()
-  async find(): Promise<User> {
-    return this.user;
+  async find(_req: Request, res: Response): Promise<void> {
+    res.json(this.user.toJSON());
   }
 
   @Route.Post('/users')
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
-  async create(@Request.Body() body: Partial<User>): Promise<User> {
-    try {
-      return await User.create(body);
-    } catch (e) {
-      throw new BadRequestError(e.message);
-    }
+  async create(req: Request, res: Response): Promise<void> {
+    const user: User = await User.create(req.body);
+
+    res.status(201).json(user.toJSON());
   }
 
   @Route.Put('/users/:userId')
   @Authentication.Authenticate()
-  async update(@Request.Body() body: Partial<User>): Promise<User> {
-    await this.user.update(body);
+  async update(req: Request, res: Response): Promise<void> {
+    await this.user.update(req.body);
 
-    return this.user;
+    res.json(this.user.toJSON());
   }
 
   @Route.Delete('/users/:userId')
   @Authentication.Authenticate()
-  async remove(): Promise<void> {
+  async remove(_req: Request, res: Response): Promise<void> {
     await this.user.destroy();
+
+    res.status(204).json();
   }
 
   @Route.Post('/users/login')
-  async login(@Request.Body() { userName, password }: UserLogin): Promise<string> {
-    try {
-      const user: User = await User.autenticate(userName, password);
+  async login(req: Request, res: Response): Promise<void> {
+    const user: User = await User.autenticate(req.body.userName, req.body.password);
 
-      return buildJwtToken(user.id.toString());
-    } catch (e) {
-      throw new UnauthorizedError(e.message);
-    }
+    const token: string = buildJwtToken(user.id.toString());
+
+    res.status(201).json(token);
   }
 }

@@ -1,7 +1,27 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
-import { ModelBelongsToMetadata, ModelHasOneMetadata, ModelHasManyMetadata, ModelBelongsToManyMetadata } from '../interfaces/model-metadata';
 import { ModelHooks } from 'sequelize/types/lib/hooks';
 import * as sequelizeConfig from '../../../db/config/config.js';
+
+type ModelBelongsToMetadata = {
+  model: ModelCtor<Model>,
+  options: BelongsToOptions
+}
+
+type ModelHasOneMetadata = {
+  model: ModelCtor<Model>,
+  options: HasOneOptions
+}
+
+type ModelHasManyMetadata = {
+  model: ModelCtor<Model>,
+  options: HasManyOptions
+}
+
+type ModelBelongsToManyMetadata = {
+  model: ModelCtor<Model>,
+  options: BelongsToManyOptions
+}
+
 
 const { NODE_ENV = 'development' } = process.env;
 
@@ -28,50 +48,87 @@ const MODEL_BELONGS_TO_MANY: symbol = Symbol('MODEL_BELONGS_TO_MANY');
 
 export function Column(options: ModelAttributeColumnOptions): PropertyDecorator {
   return function (target: Object, key: PropertyKey): void {
-    target[MODEL_ATTRIBUTES] = (target[MODEL_ATTRIBUTES] || []).concat({ field: key, ...options });
+    const values: ModelAttributeColumnOptions[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_ATTRIBUTES)?.value;
+
+    Object.defineProperty(target, MODEL_ATTRIBUTES, {
+      configurable: true,
+      value: (values || []).concat({ field: key as string, ...options })
+    });
   }
 }
 
 Column.BelongsTo = function (model: ModelCtor<Model>, options: BelongsToOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
-    target[MODEL_BELONGS_TO] = (target[MODEL_BELONGS_TO] || []).concat({ model, options });
+    const values: any[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_BELONGS_TO)?.value;
+
+    Object.defineProperty(target, MODEL_BELONGS_TO, {
+      configurable: true,
+      value: (values || []).concat({ model, options })
+    });
   }
 }
 
 Column.HasOne = function (model: ModelCtor<Model>, options: HasOneOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
-    target[MODEL_HAS_ONE] = (target[MODEL_HAS_ONE] || []).concat({ model, options });
+    const values: any[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_HAS_ONE)?.value;
+
+    Object.defineProperty(target, MODEL_HAS_ONE, {
+      configurable: true,
+      value: (values || []).concat({ model, options })
+    });
   }
 }
 
 Column.HasMany = function (model: ModelCtor<Model>, options: HasManyOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
-    target[MODEL_HAS_MANY] = (target[MODEL_HAS_MANY] || []).concat({ model, options });
+    const values: ModelHasManyMetadata[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_HAS_MANY)?.value;
+
+    Object.defineProperty(target, MODEL_HAS_MANY, {
+      configurable: true,
+      value: (values || []).concat({ model, options })
+    });
   }
 }
 
 Column.BelongsToMany = function (model: ModelCtor<Model>, options: BelongsToManyOptions): PropertyDecorator {
   return function (target: Object, _key: PropertyKey): void {
-    target[MODEL_BELONGS_TO_MANY] = (target[MODEL_BELONGS_TO_MANY] || []).concat({ model, options });
+    const values: ModelBelongsToMetadata[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_BELONGS_TO_MANY)?.value;
+
+    Object.defineProperty(target, MODEL_BELONGS_TO_MANY, {
+      configurable: true,
+      value: (values || []).concat({ model, options })
+    });
   }
 }
 
 export function Validate(): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    target[MODEL_VALIDATES] = (target[MODEL_VALIDATES] || []).concat({ [key]: descriptor.value.bind(target) });
+    const values: ModelValidateOptions[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_VALIDATES)?.value;
+
+    Object.defineProperty(target, MODEL_VALIDATES, {
+      configurable: true,
+      value: (values || []).concat({ [key]: descriptor.value.bind(target) })
+    });
   }
 }
 
 export function Hook(name: keyof ModelHooks): MethodDecorator {
   return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
-    target[MODEL_HOOKS] = (target[MODEL_HOOKS] || []).concat({ name, handler: descriptor.value.bind(target) });
+    const values: { name: keyof ModelHooks, handler: Function }[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_HOOKS)?.value;
+
+    Object.defineProperty(target, MODEL_HOOKS, {
+      configurable: true,
+      value: (values || []).concat({ name, handler: descriptor.value.bind(target) })
+    });
   }
 }
 
 export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorator {
   return function (target: Function): void {
-    const modelAttributes: ModelAttributes = (target.prototype[MODEL_ATTRIBUTES] || []).reduce(
-      (ag: object, i: Partial<ModelAttributeColumnOptions>) => {
+    const modelAttributesValues: ModelAttributeColumnOptions[] = Object.getOwnPropertyDescriptor(target.prototype, MODEL_ATTRIBUTES)?.value;
+
+    const modelAttributes: ModelAttributes = modelAttributesValues.reduce(
+      (ag, i) => {
         const { field, ...options } = i;
 
         return {
@@ -79,13 +136,17 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
           [field as string]: options
         }
       },
-      {}
+      {} as ModelAttributes
     );
 
-    const validate: ModelValidateOptions = (target.prototype[MODEL_VALIDATES] || []).reduce((ag: object, i: Partial<ModelValidateOptions>) => ({ ...ag, ...i }), {});
+    const modelValidateOptionsValues: ModelValidateOptions[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_VALIDATES)?.value;
 
-    const hooks: ModelHooks = (target[MODEL_HOOKS] || []).reduce(
-      (ag: object, i: any) => {
+    const validate: ModelValidateOptions | undefined = modelValidateOptionsValues?.reduce((ag: object, i: ModelValidateOptions) => ({ ...ag, ...i }), {});
+
+    const modelHooksValues: { name: keyof ModelHooks, handler: Function }[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_HOOKS)?.value;
+
+    const hooks: ModelHooks | undefined = modelHooksValues?.reduce(
+      (ag, i) => {
         const { name, handler } = i;
 
         return {
@@ -93,7 +154,7 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
           [name]: handler
         }
       },
-      {});
+      {} as ModelHooks);
 
     (target as ModelCtor<Model>).init(modelAttributes, {
       ...modelOptions,
@@ -102,19 +163,27 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
       sequelize
     });
 
-    (target.prototype[MODEL_BELONGS_TO] || []).forEach((b: ModelBelongsToMetadata) => {
+    const modelBelongsToValues: ModelBelongsToMetadata[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_BELONGS_TO)?.value;
+
+    modelBelongsToValues?.forEach(b => {
       (target as ModelCtor<Model>).belongsTo(b.model, b.options);
     });
 
-    (target.prototype[MODEL_HAS_ONE] || []).forEach((b: ModelHasOneMetadata) => {
+    const modelHasOneValues: ModelHasOneMetadata[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_HAS_ONE)?.value;
+
+    modelHasOneValues?.forEach(b => {
       (target as ModelCtor<Model>).hasOne(b.model, b.options);
     });
 
-    (target.prototype[MODEL_HAS_MANY] || []).forEach((b: ModelHasManyMetadata) => {
+    const modelHasManyValues: ModelHasManyMetadata[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_HAS_MANY)?.value;
+
+    modelHasManyValues?.forEach(b => {
       (target as ModelCtor<Model>).hasMany(b.model, b.options);
     });
 
-    (target.prototype[MODEL_BELONGS_TO_MANY] || []).forEach((b: ModelBelongsToManyMetadata) => {
+    const modelBelongsToManyValues: ModelBelongsToManyMetadata[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_BELONGS_TO_MANY)?.value;
+
+    modelBelongsToManyValues?.forEach(b => {
       (target as ModelCtor<Model>).belongsToMany(b.model, b.options);
     });
 

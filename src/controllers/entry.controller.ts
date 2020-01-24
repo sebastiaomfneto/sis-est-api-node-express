@@ -1,4 +1,5 @@
-import { Route, Authentication, Request } from '../lib';
+import { Request, Response, NextFunction } from 'express';
+import { Route, Authentication } from '../lib';
 import { NotFoundError, BadRequestError } from '../lib/errors';
 
 import { Entry } from '../models';
@@ -7,49 +8,53 @@ export default class EntryController {
   entry: Entry;
 
   @Route.Param('entryId')
-  async findById(entryId: string): Promise<void> {
-    const entry: Entry | null = await Entry.findByPk(entryId);
+  async findById(req: Request<{ entryId: string }>, _res: Response, next: NextFunction): Promise<void> {
+    const entry: Entry | null = await Entry.findByPk(req.params.entryId);
 
     if (!entry) {
       throw new NotFoundError();
     }
 
     this.entry = entry;
+
+    next();
   }
 
   @Route.Get('/entries')
   @Authentication.Authenticate()
-  async index(): Promise<Entry[]> {
-    return await Entry.findAll();
+  async index(_req: Request, res: Response): Promise<void> {
+    const entries: Entry[] = await Entry.findAll();
+
+    res.json(entries);
   }
 
   @Route.Get('/entries/:entryId')
   @Authentication.Authenticate()
-  async find(): Promise<Entry> {
-    return this.entry;
+  async find(_req: Request, res: Response): Promise<void> {
+    res.json(this.entry.toJSON());
   }
 
   @Route.Post('/entries')
   @Authentication.Authenticate()
-  async create(@Request.Body() body: Partial<Entry>): Promise<Entry> {
-    try {
-      return await Entry.create(body);
-    } catch (e) {
-      throw new BadRequestError(e.message);
-    }
+  async create(req: Request, res: Response): Promise<void> {
+    const entry: Entry = await Entry.create(req.body);
+
+    res.status(201).json(entry.toJSON());
   }
 
   @Route.Put('/entries/:entryId')
   @Authentication.Authenticate()
-  async update(@Request.Body() body: Partial<Entry>): Promise<Entry> {
-    await this.entry.update(body);
+  async update(req: Request, res: Response): Promise<void> {
+    await this.entry.update(req.body);
 
-    return this.entry;
+    res.json(this.entry.toJSON());
   }
 
   @Route.Delete('/entries/:entryId')
   @Authentication.Authenticate()
-  async remove(): Promise<void> {
+  async remove(_req: Request, res: Response): Promise<void> {
     await this.entry.destroy();
+
+    res.status(204).json();
   }
 }

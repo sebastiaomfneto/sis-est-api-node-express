@@ -26,11 +26,10 @@ export class User extends Model {
   userName: string;
 
   @Column({
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [3, 100],
-      isAlphanumeric: true,
+      len: [3, 100]
     }
   })
   password: string;

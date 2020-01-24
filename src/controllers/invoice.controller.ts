@@ -1,5 +1,6 @@
-import { Route, Request, Authentication } from '../lib';
-import { NotFoundError, BadRequestError } from '../lib/errors';
+import { Request, Response, NextFunction } from 'express';
+import { Route, Authentication } from '../lib';
+import { NotFoundError } from '../lib/errors';
 
 import { Invoice, Entry, Parameter } from '../models';
 
@@ -8,33 +9,37 @@ export class InvoiceController {
 
   @Route.Param('invoiceId')
   @Authentication.Authenticate()
-  async findById(invoiceId: string): Promise<void> {
-    const invoice: Invoice | null = await Invoice.findByPk(invoiceId);
+  async findById(req: Request, _res: Response, next: NextFunction): Promise<void> {
+    const invoice: Invoice | null = await Invoice.findByPk(req.params.invoiceId);
 
     if (!invoice) {
       throw new NotFoundError();
     }
 
     this.invoice = invoice;
+
+    next();
   }
 
   @Route.Get('/invoices')
   @Authentication.Authenticate()
-  async index(): Promise<Invoice[]> {
-    return await Invoice.findAll();
+  async index(_req: Request, res: Response): Promise<void> {
+    const invoices: Invoice[] = await Invoice.findAll();
+
+    res.json(invoices);
   }
 
   @Route.Get('/invoices/:invoiceId')
   @Authentication.Authenticate()
-  async find(): Promise<Invoice> {
-    return this.invoice;
+  async find(_req: Request, res: Response): Promise<void> {
+    res.json(this.invoice.toJSON());
   }
 
   @Route.Post('/invoices')
   @Authentication.Authenticate()
-  async create(@Request.Body() body: Partial<Invoice>): Promise<Invoice> {
+  async create(req: Request, res: Response): Promise<void> {
     const parameter: Parameter | null = await Parameter.findOne();
-    const entry: Entry | null = await Entry.findByPk(body.entryId);
+    const entry: Entry | null = await Entry.findByPk(req.body.entryId);
 
     if (!parameter) {
       throw new Error('Paramters not found');
@@ -44,20 +49,18 @@ export class InvoiceController {
       throw new NotFoundError('Entry not found');
     }
 
-    try {
-      const invoice: Invoice = await Invoice.build(body);
+    req.body.totalValue = Invoice.getTotalValue(entry.initialDate, entry.finalDate, parameter.valuePerHour)
 
-      invoice.totalValue = Invoice.getTotalValue(entry.initialDate, entry.finalDate, parameter.valuePerHour)
+    const invoice: Invoice = await Invoice.create(req.body);
 
-      return await invoice.save();
-    } catch (e) {
-      throw new BadRequestError(e.message);
-    }
+    res.status(201).json(invoice.toJSON());
   }
 
   @Route.Delete('/invoices/:invoiceId')
   @Authentication.Authenticate()
-  async remove(): Promise<void> {
+  async remove(_req: Request, res: Response): Promise<void> {
     await this.invoice.destroy();
+
+    res.status(204).json();
   }
 }
