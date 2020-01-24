@@ -1,7 +1,7 @@
-import { Route, Request, buildJwtToken, Authentication } from '../lib';
+import { Route, Request, buildJwtToken, Authentication, Authorization } from '../lib';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '../lib/errors';
 
-import { User, UserLogin } from '../models';
+import { User, UserLogin, UserRole } from '../models';
 
 export class UserController {
   user: User;
@@ -18,7 +18,7 @@ export class UserController {
   }
 
   @Route.Get('/users')
-  //@Authentication.Authenticate()
+  @Authentication.Authenticate()
   async index(): Promise<User[]> {
     return await User.findAll();
   }
@@ -30,7 +30,8 @@ export class UserController {
   }
 
   @Route.Post('/users')
-  //@Authentication.Authenticate()
+  @Authentication.Authenticate()
+  @Authorization.Require(UserRole.ADMIN)
   async create(@Request.Body() body: Partial<User>): Promise<User> {
     try {
       return await User.create(body);
@@ -48,7 +49,7 @@ export class UserController {
   }
 
   @Route.Delete('/users/:userId')
-  //@Authentication.Authenticate()
+  @Authentication.Authenticate()
   async remove(): Promise<void> {
     await this.user.destroy();
   }

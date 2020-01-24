@@ -3,8 +3,9 @@ import { Model, ModelCtor } from 'sequelize';
 import { REQUEST_REQUEST, REQUEST_PARAMS, REQUEST_QUERIES, REQUEST_BODIES } from './request.decorator';
 import { RESPONSE_RESPONSE } from './response.decorator';
 import { AUTHENTICATION_AUTHENTICATE, getJwtTokenPayload, AUTHENTICATION_USER } from './authentication.decorator';
+import { AUTHENTICATION_REQUIRE } from './authorization.decorator';
 import { RequestMetadata } from '../interfaces/request-metadata';
-import { UnauthorizedError } from '../errors';
+import { UnauthorizedError, ForbiddenError } from '../errors';
 
 declare global {
   namespace Express {
@@ -51,6 +52,18 @@ function buildAuthenticationHandler(target: Object, key: PropertyKey): express.H
     } else {
       next();
     }
+  }
+}
+
+function buildAuthorizationHandler(target: Object, key: PropertyKey): express.Handler {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    const authorization: { key: number, role: string } | null = (target[AUTHENTICATION_REQUIRE] || []).find((i: any) => i.key === key);
+
+    if (authorization && authorization.role !== (req.user as any).role) {
+      return next(new ForbiddenError());
+    }
+
+    next();
   }
 }
 
@@ -126,25 +139,25 @@ Route.Param = function (name: string): MethodDecorator {
 
 Route.Get = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).get(buildAuthenticationHandler(target, key), buildFinalHandler(target, key, descriptor));
+    router.route(path).get(buildAuthenticationHandler(target, key), buildAuthorizationHandler(target, key), buildFinalHandler(target, key, descriptor));
   }
 }
 
 Route.Post = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).post(buildAuthenticationHandler(target, key), buildStatusHandler(201), buildFinalHandler(target, key, descriptor)
+    router.route(path).post(buildAuthenticationHandler(target, key), buildAuthorizationHandler(target, key), buildStatusHandler(201), buildFinalHandler(target, key, descriptor)
     );
   }
 }
 
 Route.Put = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).put(buildAuthenticationHandler(target, key), buildFinalHandler(target, key, descriptor));
+    router.route(path).put(buildAuthenticationHandler(target, key), buildAuthorizationHandler(target, key), buildFinalHandler(target, key, descriptor));
   }
 }
 
 Route.Delete = function (path: string): MethodDecorator {
   return function (target: Object, key: PropertyKey, descriptor: PropertyDescriptor): void {
-    router.route(path).delete(buildAuthenticationHandler(target, key), buildStatusHandler(204), buildFinalHandler(target, key, descriptor));
+    router.route(path).delete(buildAuthenticationHandler(target, key), buildAuthorizationHandler(target, key), buildStatusHandler(204), buildFinalHandler(target, key, descriptor));
   }
 }

@@ -16,10 +16,23 @@ export interface UserLogin {
 export class User extends Model {
   public readonly id: number;
 
-  @Column({ type: DataTypes.STRING(100) })
+  @Column({
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    validate: {
+      len: [3, 100]
+    }
+  })
   userName: string;
 
-  @Column({ type: DataTypes.STRING(100) })
+  @Column({
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    validate: {
+      len: [3, 100],
+      isAlphanumeric: true,
+    }
+  })
   password: string;
 
   @Column({ type: DataTypes.ENUM('user', 'admin') })
