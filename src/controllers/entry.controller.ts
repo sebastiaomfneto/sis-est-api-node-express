@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Route, Authentication } from '../lib';
-import { NotFoundError, BadRequestError } from '../lib/errors';
+import { NotFoundError } from '../lib/errors';
 
 import { Entry } from '../models';
 

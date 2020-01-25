@@ -14,10 +14,11 @@ module.exports = {
         allowNull: false
       },
       finalDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       carLicensePlate: {
-        type: Sequelize.STRING(7),
+        type: Sequelize.STRING(8),
         allowNull: false
       },
       createdAt: {

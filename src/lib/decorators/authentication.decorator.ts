@@ -3,14 +3,6 @@ import { ModelCtor, Model } from 'sequelize/types';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../errors';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: Model
-    }
-  }
-}
-
 const { JWT_SECRET = 'secret' } = process.env;
 
 export const buildJwtToken = function (payload: string): string {
@@ -40,7 +32,7 @@ Authentication.Authenticate = function (): MethodDecorator {
         return next(new UnauthorizedError());
       }
 
-      req.user = user;
+      (req.user as any) = user;
       value?.call(target, req, res, next);
     }
   }

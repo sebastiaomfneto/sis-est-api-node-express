@@ -1,6 +1,5 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
 import { ModelHooks } from 'sequelize/types/lib/hooks';
-import * as sequelizeConfig from '../../../db/config/config.js';
 
 type ModelBelongsToMetadata = {
   model: ModelCtor<Model>,
@@ -22,6 +21,7 @@ type ModelBelongsToManyMetadata = {
   options: BelongsToManyOptions
 }
 
+const sequelizeConfig: { [key: string]: any } = require('../../../db/config/config.js')
 
 const { NODE_ENV = 'development' } = process.env;
 

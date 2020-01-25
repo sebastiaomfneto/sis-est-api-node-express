@@ -1,20 +1,23 @@
 import bcryptjs from 'bcryptjs'
-import { Model, DataTypes } from 'sequelize';
-import { Table, Column, Hook } from '../lib';
+import { Model, DataTypes, ValidationError } from 'sequelize';
+import { Table, Column, Hook, Validate } from '../lib';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: InstanceType<typeof User>
+    }
+  }
+}
 
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin'
 }
 
-export interface UserLogin {
-  userName: string;
-  password: string;
-}
-
 @Table({ tableName: 'Users' })
 export class User extends Model {
-  public readonly id: number;
+  readonly id: number;
 
   @Column({
     type: DataTypes.STRING(100),
@@ -37,17 +40,26 @@ export class User extends Model {
   @Column({ type: DataTypes.ENUM('user', 'admin') })
   role: UserRole;
 
-  public readonly createdAt: Date;
-  public readonly updatedAt: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+
+  get isAdmin(): boolean {
+    return this.role === UserRole.ADMIN;
+  }
+
+  get isUser(): boolean {
+    return this.role === UserRole.USER;
+  }
 
   comparePassword(password: string): boolean {
     return bcryptjs.compareSync(password, this.password);
   }
 
-  @Hook('beforeCreate')
-  static async hashPassword(instance: User) {
-    const salt: string = await bcryptjs.genSalt(10);
-    instance.password = await bcryptjs.hash(instance.password, salt);
+  @Validate()
+  protected passwordContainsOneLetterAndOneNumber(): void {
+    if (!(/\w/.test(this.password) && /\d/.test(this.password))) {
+      throw new ValidationError('Field password must be one letter and one number');
+    }
   }
 
   static async autenticate(userName: string, password: string): Promise<User> {
@@ -60,5 +72,21 @@ export class User extends Model {
     }
 
     return user;
+  }
+
+  @Hook('beforeCreate')
+  protected async hashPassword(instance: User): Promise<void> {
+    const salt: string = await bcryptjs.genSalt(10);
+    instance.password = await bcryptjs.hash(instance.password, salt);
+  }
+
+  /**
+   * Não deve permitir que usuário administradores deixem de ser administradores.
+   */
+  @Hook('beforeUpdate')
+  protected shouldNotAllowAdminLeaveBeAdmin(instance: User): void {
+    if (this.isAdmin) {
+      instance.role === UserRole.ADMIN;
+    }
   }
 }

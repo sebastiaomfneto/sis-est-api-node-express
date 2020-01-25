@@ -1,23 +1,22 @@
 import { Model, DataTypes } from 'sequelize';
-
 import { Table, Column } from '../lib';
 import { Entry } from './entry.model';
 
 @Table({ tableName: 'Invoices' })
 export class Invoice extends Model {
-  public readonly id: number;
+  readonly id: number;
 
   @Column({ type: DataTypes.INTEGER, allowNull: false })
-  public entryId: number;
+  entryId: number;
 
   @Column({ type: DataTypes.DECIMAL, allowNull: false })
-  public totalValue: number;
+  totalValue: number;
 
   @Column.BelongsTo(Invoice, { foreignKey: 'entryId' })
-  public entry: Entry;
+  entry: Entry;
 
-  public readonly createdAt: Date;
-  public readonly updatedAt: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 
   static getTotalValue(initialDate: Date, finalDate: Date, valuePerHour: number) {
     const time = initialDate.getTime() - finalDate.getTime();

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { Route, Authentication } from '../lib';
+import { Route, Authentication, Authorization } from '../lib';
 import { NotFoundError } from '../lib/errors';
-
-import { Parameter } from '../models';
+import { Parameter, UserRole } from '../models';
 
 export class ParameterController {
   parameter: Parameter;
@@ -22,6 +21,7 @@ export class ParameterController {
 
   @Route.Get('/parameters')
   @Authentication.Authenticate()
+  @Authorization.Require(UserRole.ADMIN)
   async index(_req: Request, res: Response): Promise<void> {
     const parameters: Parameter[] = await Parameter.findAll();
 
@@ -30,20 +30,14 @@ export class ParameterController {
 
   @Route.Get('/parameters/:parameterId')
   @Authentication.Authenticate()
+  @Authorization.Require(UserRole.ADMIN)
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.parameter);
   }
 
-  @Route.Post('/parameters')
-  @Authentication.Authenticate()
-  async create(req: Request, res: Response): Promise<void> {
-    const parameter: Parameter = await Parameter.create(req.body);
-
-    res.status(201).json(parameter.toJSON());
-  }
-
   @Route.Put('/parameters/:parameterId')
   @Authentication.Authenticate()
+  @Authorization.Require(UserRole.ADMIN)
   async update(req: Request, res: Response): Promise<void> {
     await this.parameter.update(req.body);
 

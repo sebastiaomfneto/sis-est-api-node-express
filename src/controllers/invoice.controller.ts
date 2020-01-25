@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Route, Authentication } from '../lib';
 import { NotFoundError } from '../lib/errors';
-
 import { Invoice, Entry, Parameter } from '../models';
 
 export class InvoiceController {

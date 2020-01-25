@@ -1,5 +1,4 @@
 import { Application } from './lib';
-
 import './models';
 import './controllers';
 
