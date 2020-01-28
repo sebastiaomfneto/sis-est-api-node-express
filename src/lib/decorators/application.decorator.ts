@@ -5,7 +5,7 @@ import { NotFoundError } from '../errors'
 
 dotenv.config();
 
-const { PORT = '3000', HOST = '127.0.0.1' } = process.env;
+const { APP_PORT = '3000', APP_HOST = '127.0.0.1' } = process.env;
 
 const server: express.Express = express();
 
@@ -27,13 +27,13 @@ server.use((err: any, _req: express.Request, res: express.Response, _next: expre
 
 export function Application(): ClassDecorator {
   return function (): void {
-    server.listen(parseInt(PORT), HOST, (err: Error) => {
+    server.listen(parseInt(APP_PORT), APP_HOST, (err: Error) => {
       if (err) {
         console.error(err.message);
         process.exit(1);
       }
 
-      console.log(`Server is running on http://${HOST}:${PORT}`);
+      console.log(`Server is running on http://${APP_HOST}:${APP_PORT}`);
     });
   }
 }

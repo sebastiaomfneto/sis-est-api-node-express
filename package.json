@@ -2,7 +2,6 @@
   "name": "sis-est-api-node-express",
   "version": "1.0.0",
   "description": "POC Sistema de Estacionamento com Node/Express/Typescript",
-  "main": "index.js",
   "scripts": {
     "start": "nodemon",
     "migration:generate": "sequelize migration:generate",
