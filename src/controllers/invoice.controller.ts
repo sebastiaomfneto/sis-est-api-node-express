@@ -34,6 +34,13 @@ export class InvoiceController {
     res.json(this.invoice.toJSON());
   }
 
+  @Route.Get('/invoices/:invoiceId/entry')
+  async findEntryByInvoiceId(_req: Request, res: Response): Promise<void> {
+    const entry: Entry | null = await Entry.findByPk(this.invoice.entryId);
+
+    res.json(entry);
+  }
+
   @Route.Post('/invoices')
   @Authentication.Authenticate()
   async create(req: Request, res: Response): Promise<void> {
