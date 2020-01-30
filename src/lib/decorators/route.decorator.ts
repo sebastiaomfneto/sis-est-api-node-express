@@ -25,7 +25,7 @@ Route.Param = function (name: string): MethodDecorator {
   }
 }
 
-Route.Get = function (path?: string): MethodDecorator {
+Route.Get = function (path: string = ''): MethodDecorator {
   return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
     const route: string = Object.getOwnPropertyDescriptor(target, ROUTE_ROUTE)?.value || '';
 
@@ -39,7 +39,7 @@ Route.Get = function (path?: string): MethodDecorator {
   }
 }
 
-Route.Post = function (path?: string): MethodDecorator {
+Route.Post = function (path: string = ''): MethodDecorator {
   return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
     const route: string = Object.getOwnPropertyDescriptor(target, ROUTE_ROUTE)?.value || '';
 
@@ -53,7 +53,7 @@ Route.Post = function (path?: string): MethodDecorator {
   }
 }
 
-Route.Put = function (path?: string): MethodDecorator {
+Route.Put = function (path: string = ''): MethodDecorator {
   return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
     const route: string = Object.getOwnPropertyDescriptor(target, ROUTE_ROUTE)?.value || '';
 
@@ -67,7 +67,7 @@ Route.Put = function (path?: string): MethodDecorator {
   }
 }
 
-Route.Delete = function (path?: string): MethodDecorator {
+Route.Delete = function (path: string = ''): MethodDecorator {
   return function (target: Object, _key: PropertyKey, descriptor: PropertyDescriptor): void {
     const route: string = Object.getOwnPropertyDescriptor(target, ROUTE_ROUTE)?.value || '';
 
