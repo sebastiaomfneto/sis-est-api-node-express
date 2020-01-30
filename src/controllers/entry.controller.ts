@@ -20,23 +20,19 @@ export default class EntryController {
     next();
   }
 
-  @Route.Get('/entries'/* , {
+  @Route.Get('/entries', {
     responses: {
       '200': {
-        description: 'Entry model instance',
         content: {
           'application/json': {
             schema: {
-              type: '',
-              items: {
-                initialDate: { type: 'Date' }
-              }
+              $ref: '#/components/schemas/Entry'
             }
           }
         }
       }
     }
-  } */)
+  })
   @Authentication.Authenticate()
   async index(_req: Request, res: Response): Promise<void> {
     const entries: Entry[] = await Entry.findAll();
@@ -44,13 +40,37 @@ export default class EntryController {
     res.json(entries);
   }
 
-  @Route.Get('/entries/:entryId')
+  @Route.Get('/entries/:entryId', {
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/Entry'
+            }
+          }
+        }
+      }
+    }
+  })
   @Authentication.Authenticate()
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.entry.toJSON());
   }
 
-  @Route.Post('/entries')
+  @Route.Post('/entries', {
+    responses: {
+      '201': {
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/Entry'
+            }
+          }
+        }
+      }
+    }
+  })
   @Authentication.Authenticate()
   async create(req: Request, res: Response): Promise<void> {
     const entry: Entry = await Entry.create(req.body);
@@ -66,7 +86,19 @@ export default class EntryController {
     res.json(this.entry.toJSON());
   }
 
-  @Route.Delete('/entries/:entryId')
+  @Route.Delete('/entries/:entryId', {
+    responses: {
+      '204': {
+        content: {
+          'application/json': {
+            schema: {
+              $ref: ''
+            }
+          }
+        }
+      }
+    }
+  })
   @Authentication.Authenticate()
   async remove(_req: Request, res: Response): Promise<void> {
     await this.entry.destroy();

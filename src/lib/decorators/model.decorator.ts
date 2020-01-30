@@ -1,5 +1,6 @@
 import { Sequelize, ModelAttributes, ModelAttributeColumnOptions, ModelOptions, ModelCtor, ModelValidateOptions, Model, BelongsToOptions, HasOneOptions, HasManyOptions, BelongsToManyOptions } from 'sequelize';
 import { ModelHooks } from 'sequelize/types/lib/hooks';
+import { SchemaObject } from 'openapi3-ts';
 
 type ModelBelongsToMetadata = {
   model: ModelCtor<Model>,
@@ -19,6 +20,34 @@ type ModelHasManyMetadata = {
 type ModelBelongsToManyMetadata = {
   model: ModelCtor<Model>,
   options: BelongsToManyOptions
+}
+
+function convertSequelizeDataTypeToOpenApiDataType(type: string): string {
+  if (type.startsWith('DATE') || type.startsWith('STRING') || type.startsWith('ENUM')) {
+    return 'string';
+  }
+
+  if (type.startsWith('FLOAT') || type.startsWith('REAL') || type.startsWith('DOUBLE') || type.startsWith('DECIMAL')) {
+    return 'number';
+  }
+
+  if (type === 'INTEGER' || type.startsWith('BIGINT')) {
+    return 'integer';
+  }
+
+  if (type === 'BOOLEAN') {
+    return 'boolean';
+  }
+
+  if (type.startsWith('ARRAY')) {
+    return 'array';
+  }
+
+  if (type.startsWith('JSON')) {
+    return 'object';
+  }
+
+  return '';
 }
 
 const sequelizeConfig: { [key: string]: any } = require('../../../db/config/config.js')
@@ -46,13 +75,15 @@ const MODEL_HAS_MANY: symbol = Symbol('MODEL_HAS_MANY');
 
 const MODEL_BELONGS_TO_MANY: symbol = Symbol('MODEL_BELONGS_TO_MANY');
 
+export const swaggerDocumentComponentsSchemas: { [modelName: string]: SchemaObject } = {};
+
 export function Column(options: ModelAttributeColumnOptions): PropertyDecorator {
   return function (target: Object, key: PropertyKey): void {
     const values: ModelAttributeColumnOptions[] | undefined = Object.getOwnPropertyDescriptor(target, MODEL_ATTRIBUTES)?.value;
 
     Object.defineProperty(target, MODEL_ATTRIBUTES, {
       configurable: true,
-      value: (values || []).concat({ field: key as string, ...options })
+      value: (values ?? []).concat({ field: key as string, ...options })
     });
   }
 }
@@ -63,7 +94,7 @@ Column.BelongsTo = function (model: ModelCtor<Model>, options: BelongsToOptions)
 
     Object.defineProperty(target, MODEL_BELONGS_TO, {
       configurable: true,
-      value: (values || []).concat({ model, options })
+      value: (values ?? []).concat({ model, options })
     });
   }
 }
@@ -74,7 +105,7 @@ Column.HasOne = function (model: ModelCtor<Model>, options: HasOneOptions): Prop
 
     Object.defineProperty(target, MODEL_HAS_ONE, {
       configurable: true,
-      value: (values || []).concat({ model, options })
+      value: (values ?? []).concat({ model, options })
     });
   }
 }
@@ -85,7 +116,7 @@ Column.HasMany = function (model: ModelCtor<Model>, options: HasManyOptions): Pr
 
     Object.defineProperty(target, MODEL_HAS_MANY, {
       configurable: true,
-      value: (values || []).concat({ model, options })
+      value: (values ?? []).concat({ model, options })
     });
   }
 }
@@ -96,7 +127,7 @@ Column.BelongsToMany = function (model: ModelCtor<Model>, options: BelongsToMany
 
     Object.defineProperty(target, MODEL_BELONGS_TO_MANY, {
       configurable: true,
-      value: (values || []).concat({ model, options })
+      value: (values ?? []).concat({ model, options })
     });
   }
 }
@@ -107,7 +138,7 @@ export function Validate(): MethodDecorator {
 
     Object.defineProperty(target, MODEL_VALIDATES, {
       configurable: true,
-      value: (values || []).concat({ [key]: descriptor.value.bind(target) })
+      value: (values ?? []).concat({ [key]: descriptor.value.bind(target) })
     });
   }
 }
@@ -118,7 +149,7 @@ export function Hook(name: keyof ModelHooks): MethodDecorator {
 
     Object.defineProperty(target, MODEL_HOOKS, {
       configurable: true,
-      value: (values || []).concat({ name, handler: descriptor.value.bind(target) })
+      value: (values ?? []).concat({ name, handler: descriptor.value.bind(target) })
     });
   }
 }
@@ -138,6 +169,24 @@ export function Table(modelOptions: ModelOptions | undefined = {}): ClassDecorat
       },
       {} as ModelAttributes
     );
+
+    swaggerDocumentComponentsSchemas[target.name] = ({
+      type: 'object',
+      properties: modelAttributesValues.reduce(
+        (ag, i) => {
+          const { field, type, allowNull } = i;
+
+          return {
+            ...ag,
+            [field as string]: {
+              type: convertSequelizeDataTypeToOpenApiDataType(type.valueOf().valueOf().toString()),
+              required: !allowNull
+            }
+          }
+        },
+        {}
+      )
+    } as SchemaObject)
 
     const modelValidateOptionsValues: ModelValidateOptions[] | undefined = Object.getOwnPropertyDescriptor(target.prototype, MODEL_VALIDATES)?.value;
 
