@@ -3,6 +3,7 @@ import { Route, Authentication, Authorization } from '../lib';
 import { NotFoundError } from '../lib/errors';
 import { User, UserRole } from '../models';
 
+@Route('/users')
 export class UserController {
   user: User;
 
@@ -19,7 +20,7 @@ export class UserController {
     next();
   }
 
-  @Route.Get('/users')
+  @Route.Get()
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
   async index(_req: Request, res: Response): Promise<void> {
@@ -28,14 +29,14 @@ export class UserController {
     res.json(users);
   }
 
-  @Route.Get('/users/:userId')
+  @Route.Get('/:userId')
   @Authentication.Authenticate()
   @Authorization.OnlyAdminOrSelfUser('userId')
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.user.toJSON());
   }
 
-  @Route.Post('/users')
+  @Route.Post('')
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
   async create(req: Request, res: Response): Promise<void> {
@@ -49,7 +50,7 @@ export class UserController {
     res.status(201).json(user.toJSON());
   }
 
-  @Route.Put('/users/:userId')
+  @Route.Put('/:userId')
   @Authentication.Authenticate()
   @Authorization.OnlyAdminOrSelfUser('userId')
   async update(req: Request, res: Response): Promise<void> {
@@ -63,7 +64,7 @@ export class UserController {
     res.json(this.user.toJSON());
   }
 
-  @Route.Delete('/users/:userId')
+  @Route.Delete('/:userId')
   @Authentication.Authenticate()
   @Authorization.OnlyAdminOrSelfUser('userId')
   async remove(req: Request, res: Response): Promise<void> {

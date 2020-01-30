@@ -4,6 +4,7 @@ import { NotFoundError } from '../lib/errors';
 
 import { Entry } from '../models';
 
+@Route('/entries')
 export default class EntryController {
   entry: Entry;
 
@@ -20,7 +21,7 @@ export default class EntryController {
     next();
   }
 
-  @Route.Get('/entries')
+  @Route.Get()
   @Authentication.Authenticate()
   async index(_req: Request, res: Response): Promise<void> {
     const entries: Entry[] = await Entry.findAll();
@@ -28,13 +29,13 @@ export default class EntryController {
     res.json(entries);
   }
 
-  @Route.Get('/entries/:entryId')
+  @Route.Get('/:entryId')
   @Authentication.Authenticate()
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.entry.toJSON());
   }
 
-  @Route.Post('/entries')
+  @Route.Post()
   @Authentication.Authenticate()
   async create(req: Request, res: Response): Promise<void> {
     const entry: Entry = await Entry.create(req.body);
@@ -42,7 +43,7 @@ export default class EntryController {
     res.status(201).json(entry.toJSON());
   }
 
-  @Route.Put('/entries/:entryId')
+  @Route.Put('/:entryId')
   @Authentication.Authenticate()
   async update(req: Request, res: Response): Promise<void> {
     await this.entry.update(req.body);
@@ -50,7 +51,7 @@ export default class EntryController {
     res.json(this.entry.toJSON());
   }
 
-  @Route.Delete('/entries/:entryId')
+  @Route.Delete('/:entryId')
   @Authentication.Authenticate()
   async remove(_req: Request, res: Response): Promise<void> {
     await this.entry.destroy();

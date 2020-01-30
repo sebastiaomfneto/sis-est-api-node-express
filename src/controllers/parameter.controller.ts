@@ -3,6 +3,7 @@ import { Route, Authentication, Authorization } from '../lib';
 import { NotFoundError } from '../lib/errors';
 import { Parameter, UserRole } from '../models';
 
+@Route('/parameters')
 export class ParameterController {
   parameter: Parameter;
 
@@ -19,7 +20,7 @@ export class ParameterController {
     next();
   }
 
-  @Route.Get('/parameters')
+  @Route.Get()
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
   async index(_req: Request, res: Response): Promise<void> {
@@ -28,14 +29,14 @@ export class ParameterController {
     res.json(parameters);
   }
 
-  @Route.Get('/parameters/:parameterId')
+  @Route.Get('/:parameterId')
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.parameter);
   }
 
-  @Route.Put('/parameters/:parameterId')
+  @Route.Put('/:parameterId')
   @Authentication.Authenticate()
   @Authorization.Require(UserRole.ADMIN)
   async update(req: Request, res: Response): Promise<void> {

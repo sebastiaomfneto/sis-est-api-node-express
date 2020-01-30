@@ -3,6 +3,7 @@ import { Route, Authentication } from '../lib';
 import { NotFoundError } from '../lib/errors';
 import { Invoice, Entry, Parameter } from '../models';
 
+@Route('/invoices')
 export class InvoiceController {
   invoice: Invoice;
 
@@ -20,7 +21,7 @@ export class InvoiceController {
     next();
   }
 
-  @Route.Get('/invoices')
+  @Route.Get()
   @Authentication.Authenticate()
   async index(_req: Request, res: Response): Promise<void> {
     const invoices: Invoice[] = await Invoice.findAll();
@@ -28,20 +29,20 @@ export class InvoiceController {
     res.json(invoices);
   }
 
-  @Route.Get('/invoices/:invoiceId')
+  @Route.Get('/:invoiceId')
   @Authentication.Authenticate()
   async find(_req: Request, res: Response): Promise<void> {
     res.json(this.invoice.toJSON());
   }
 
-  @Route.Get('/invoices/:invoiceId/entry')
+  @Route.Get('/:invoiceId/entry')
   async findEntryByInvoiceId(_req: Request, res: Response): Promise<void> {
     const entry: Entry | null = await Entry.findByPk(this.invoice.entryId);
 
     res.json(entry);
   }
 
-  @Route.Post('/invoices')
+  @Route.Post()
   @Authentication.Authenticate()
   async create(req: Request, res: Response): Promise<void> {
     const parameter: Parameter | null = await Parameter.findOne();
@@ -62,7 +63,7 @@ export class InvoiceController {
     res.status(201).json(invoice.toJSON());
   }
 
-  @Route.Delete('/invoices/:invoiceId')
+  @Route.Delete('/:invoiceId')
   @Authentication.Authenticate()
   async remove(_req: Request, res: Response): Promise<void> {
     await this.invoice.destroy();
